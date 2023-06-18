@@ -23,6 +23,8 @@ h2{
     background-color:black;
     color: white;
 }
+
+/* filtro o buscador */
 .filtro{
   display: none;
 }

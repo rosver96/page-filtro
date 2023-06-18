@@ -2,12 +2,17 @@ const buscador = document.getElementById('buscador');
 buscador.addEventListener('input', (e) => {
   const textoBuscado = e.target.value;
 
-  document.querySelectorAll('#idhijo').forEach((fila) => {
-    const primeraCelda = fila.querySelector('#ididentidad');
+  document.querySelectorAll('#idhijo').forEach(fila => {
+    const primeraCelda = fila.querySelector('#identidad');
+    const segundaCelda = fila.querySelector('#nombre');
+    const terceraCelda = fila.querySelector('#apellido');
     console.log(primeraCelda);
-    const textoCelda = primeraCelda.textContent;
 
-    if (textoCelda.includes(textoBuscado)) {
+    const textoCelda = primeraCelda.textContent.toLowerCase();
+    const textoCelda2 = segundaCelda.textContent.toLowerCase();
+    const textoCelda3 = terceraCelda.textContent.toLowerCase();
+
+    if (textoCelda.includes(textoBuscado) || textoCelda2.includes(textoBuscado) || textoCelda3.includes(textoBuscado) ) {
       fila.classList.remove('filtro');
     } else {
       fila.classList.add('filtro');
@@ -37,7 +42,7 @@ function listarClientes(gestionClientes) {
   gestionClientes.forEach((e, index) => {
     let hijo = document.createElement('tr');
     hijo.classList.add('table-secondary', 'tabla');
-    hijo.id = 'idhijo';
+    hijo.id = 'idhijo';  // buscador//
 
     let clienteid = document.createElement('td');
     clienteid.textContent = `${e.idC}`;
@@ -47,10 +52,12 @@ function listarClientes(gestionClientes) {
     let clientenombre = document.createElement('td');
     clientenombre.textContent = `${e.nombreC}`;
     hijo.appendChild(clientenombre);
+    clientenombre.id = 'nombre'; //buscador//
 
     let clienteapellido = document.createElement('td');
     clienteapellido.textContent = `${e.apellidoC}`;
     hijo.appendChild(clienteapellido);
+    clienteapellido.id = 'apellido' //buscador//
 
     let clienteplaca = document.createElement('td');
     clienteplaca.textContent = `${e.placaC}`;
