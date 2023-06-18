@@ -42,7 +42,7 @@ function listarClientes(gestionClientes) {
     let clienteid = document.createElement('td');
     clienteid.textContent = `${e.idC}`;
     hijo.appendChild(clienteid);
-    clienteid.id = 'identidad';
+    clienteid.id = 'identidad'; //buscador//
 
     let clientenombre = document.createElement('td');
     clientenombre.textContent = `${e.nombreC}`;
@@ -179,13 +179,13 @@ formularioGestionServicios.addEventListener('submit', function(event){
     newServicio.pts = puntos.value;
     contador++
     gestionServicios.push(newServicio);
-    listarServicios(gestionServicios);
-    formularioGestionClientes.reset();
+    listarServicios();
+    formularioGestionServicios.reset();
     crearSelectorS();
 });
 
 // LISTAR SERVICIOS ///
-function listarServicios(servicios){
+function listarServicios(){
     TablaGestionServicios.innerHTML = '';
 
     gestionServicios.forEach ((e, index) => {
@@ -208,9 +208,9 @@ function listarServicios(servicios){
         desC.textContent = `${e.Cdescripción}`;
         hijoServicios.appendChild(desC);
 
-        let pts = document.createElement('td');
-        pts.textContent = `${e.puntos}`;
-        hijoServicios.appendChild(pts);
+        let puntos = document.createElement('td');
+        puntos.textContent = `${e.pts}`;
+        hijoServicios.appendChild(puntos);
 
         TablaGestionServicios.appendChild(hijoServicios);
 
@@ -230,12 +230,11 @@ function listarServicios(servicios){
         });
 
     });
-    agregarCliente()
 }
 
 function eliminarServicio(index){
     gestionServicios.splice(index,1)
-    listarServicios(gestionServicios)
+    listarServicios();
 }
 
 const formularioCompras = document.getElementById('formularioCompras');
@@ -247,11 +246,19 @@ formularioCompras.addEventListener('submit', function(event) {
   let cedula = '';
   let valorServicio = 0;
   let puntos = 0;
+  
+  let descuento = 0.06;
+  let iva = 0.14;
 
   for (let servicio of gestionServicios) {
-    if (servicio.servicio == selectServicio.value) {
+    if (servicio.Cservicio == selectServicio.value) {
       valorServicio = parseFloat(servicio.Cvalor);
       puntos = parseFloat(servicio.pts);
+
+      valordescuento = parseFloat(valorServicio * descuento);
+      valortotaldescuento = parseFloat(valorServicio - valordescuento);
+      valorTotal = parseFloat(valorServicio * iva);
+      valortotalpagar = parseFloat(valortotaldescuento + valorTotal);
     }
   }
 
@@ -259,17 +266,16 @@ formularioCompras.addEventListener('submit', function(event) {
     if (cliente.nombreC == selectCliente.value) {
       cedula = cliente.idC;
       cliente.puntosC += puntos;
+
     }
   }
 
-  const valorSinDescuento = valorServicio / 1.14;
-  const valorTotal = valorServicio * 1.26;
 
   alert(`        *Resumen de la compra*
         Identificación: ${cedula}
         Nombre cliente: ${selectCliente.value}
         Nombre servicio: ${selectServicio.value}
-        Valor Total: $${valorTotal.toFixed(2)}
+        Valor Total: $${valortotalpagar.toFixed(2)}
         Puntos ganados: ${puntos}`);
 
   totalPuntos();
@@ -286,11 +292,11 @@ function crearSelectorC() {
 }
 
 function crearSelectorS() {
-  selectServicio.innerHTML = '<option selected>seleccionar servicio</option>';
+    selectServicio.innerHTML = '<option selected>seleccionar servicio</option>';
 
-  for (let newServicio of gestionServicios) {
+  for (let tt of gestionServicios) {
     const crearOpcionServicio = document.createElement('option');
-    crearOpcionServicio.textContent = newServicio.servicio;
+    crearOpcionServicio.textContent = tt.Cservicio;
     selectServicio.appendChild(crearOpcionServicio);
   }
 }
